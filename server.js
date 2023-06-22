@@ -3,17 +3,19 @@ const express = require("express");
 const app=express();
 const cors = require('cors');
 app.use(cors()); 
+require("dotenv").config();
 
-app.listen(3000, startingLog);
+const axios = require('axios');
 
-function startingLog(req, res) {
-  console.log("Running at 3000");
-}
+
 
 const arrData = require("./movieData/data.json");
 
 
 app.get('/',movieData);
+app.get("/favorite", endLog);
+
+
 function movieData(req,res) {
     let newArr=[];
     for (let i = 0; i < arrData.length; i++) {
@@ -24,13 +26,49 @@ function movieData(req,res) {
     
 }
 
-app.get("/favorite", endLog);
+
 
 function endLog(req, res) {
   res.send("Welcome to Favorite Page");
 }
 
+app.get("/trending", async (req, res) => {
+  const axiosResponse = await axios.get(`https://api.themoviedb.org/3/trending/all/week?api_key=${process.env.SECRET_API}&language=en-US`);
+  const myData = axiosResponse.data.results.map((result) => ({
+    "id": result.id,
+    "title": result.title,
+    "release_date": result.release_date,
+    "poster_path": result.poster_path,
+    "overview": result.overview
+  })); ;
+res.send(myData);
+});
 
+app.get("/search", async (req, res) => {
+  const {querymovName}  = req.query;
+  const axiosResponse = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.SECRET_API}&language=en-US&query=${querymovName}&page=2`);
+  const receveData = axiosResponse.data.results;
+  const movies = receveData.map((result) => ({
+    "id": result.id,
+    "title": result.title,
+    "release_date": result.release_date,
+    "poster_path": result.poster_path,
+    "overview": result.overview
+  }));
+  res.send(movies);
+});
+
+
+app.use(handleNotFound);
+
+function handleNotFound(req, res) {
+  res.status(404).send(
+  {
+    status: 404,
+    responseText: "Page not found"
+  }
+          );
+}
 
 
 // Handle server error (status 500)
@@ -46,13 +84,8 @@ function handleError(err, req, res, next) {
 }
 
 
-  app.use(handleNotFound);
+  app.listen(3000, startingLog);
 
-  function handleNotFound(req, res) {
-    res.status(404).send(
-    {
-      status: 404,
-      responseText: "Page not found"
-    }
-            );
-  }
+function startingLog(req, res) {
+  console.log("Running at 3000");
+}
