@@ -45,8 +45,8 @@ res.send(myData);
 });
 
 app.get("/search", async (req, res) => {
-  const {querymovName}  = req.query;
-  const axiosResponse = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.SECRET_API}&language=en-US&query=${querymovName}&page=2`);
+  let mName = req.query.query; 
+ let axiosResponse = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.SECRET_API}&language=en-US&query=${mName}&page=2`);
   const receveData = axiosResponse.data.results;
   const movies = receveData.map((result) => ({
     "id": result.id,
