@@ -3,13 +3,53 @@ const express = require("express");
 const app=express();
 const cors = require('cors');
 app.use(cors()); 
+const pg=require("pg");
 require("dotenv").config();
-
+app.use(express.json());//parse the body from request
 const axios = require('axios');
 
 
 
 const arrData = require("./movieData/data.json");
+const dbCli=new pg.Client('postgres://localhost:5432/allmovie');
+dbCli.connect().then(()=>{
+  app.listen(3000, startingLog);
+
+function startingLog(req, res) {
+  console.log("Running at 3000");
+}
+
+});
+
+
+
+app.post('/addMovie',(req,res)=>{
+  let title=req.body.title;
+  let release_date=req.body.release_date;
+  let poster_path=req.body.poster_path;
+  let overview=req.body.overview;
+
+  let sqlQr=`insert into movie (title ,release_date ,poster_path ,overview ) values($1,$2,$3,$4)`;
+  dbCli.query(sqlQr,[title,release_date,poster_path,overview]).then(()=>{
+    res.status(201).send(`movie ${title} added to database`);
+  })
+
+  
+});
+
+app.get("/getMovies",(req,res)=>{
+  let sql=`select * from movie`;
+  dbCli.query(sql).then((movieData)=>{
+    res.status(200).send(movieData.rows);
+
+
+});
+
+
+});
+
+
+
 
 
 app.get('/',movieData);
@@ -84,8 +124,3 @@ function handleError(err, req, res, next) {
 }
 
 
-  app.listen(3000, startingLog);
-
-function startingLog(req, res) {
-  console.log("Running at 3000");
-}
