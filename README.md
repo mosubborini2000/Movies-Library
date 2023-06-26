@@ -17,6 +17,8 @@ To build and run this app on your local machine, follow these steps:
 4. add .env file and add SECRET_API=2fe3227676b48c615554c0b555b8389a
 
 4. Open your web browser and visit: `http://localhost:3000`
+5. I installed npm i pg to work in data base
+6. I open psql to create table and put columns 
 
 ## Project Features
 The Movies Library app includes the following features:
@@ -43,8 +45,12 @@ The Movies Library app includes the following features:
 - Response: JSON data of the what Im searching on.
 -you should add ?querymovName=(name of movie you want)
 
+5. addMovie :
+ -create a post request to save a specific movie to database.
+
+6. /getMovies: Create a get request to get all the data from the database
 
 
 
-![WRRC](./assets/drawlab012.png)
+![WRRC](./assets/lab13.png)
 
