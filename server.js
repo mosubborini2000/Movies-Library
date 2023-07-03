@@ -41,14 +41,37 @@ app.get("/getMovies",(req,res)=>{
   let sql=`select * from movie`;
   dbCli.query(sql).then((movieData)=>{
     res.status(200).send(movieData.rows);
+});
+});
+
+app.delete("/DELETE/:id",async(req,res)=>{
+  let {id}=req.params;
+  let sql=`delete from movie where id= ${id}`;
+  await dbCli.query(sql);
+  res.status(200).send("deleted from database");
 
 
 });
+app.put("/UPDATE/:id",(req,res)=>{
+  let {id}=req.params;
+  let {title,release_date}=req.body;
 
+  let sql=`update movie set title=$1 ,release_date=$2  where id= ${id}`;
+  dbCli.query(sql,[title,release_date]).then((data)=>{
+
+    res.status(200).send('updated');
+
+
+  });
 
 });
-
-
+app.get("/getMovie/:id",(req,res)=>{
+  let {id}=req.params;
+  let sql=`select * from movie where id=${id} `;
+  dbCli.query(sql).then((movieData)=>{
+    res.status(200).send(movieData.rows);
+});
+});
 
 
 
@@ -99,6 +122,7 @@ app.get("/search", async (req, res) => {
 });
 
 
+
 app.use(handleNotFound);
 
 function handleNotFound(req, res) {
@@ -122,5 +146,11 @@ function handleError(err, req, res, next) {
     }
         ); 
 }
+
+
+
+
+
+
 
 
