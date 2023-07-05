@@ -1,3 +1,5 @@
 const pg=require("pg");
-const dbCli=new pg.Client('postgres://localhost:5432/allmovie');
+const {DB_URL} = require("./configs");
+
+const dbCli = new pg.Client(DB_URL);
 module.exports=dbCli;

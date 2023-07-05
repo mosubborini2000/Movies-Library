@@ -9,6 +9,7 @@ app.use(express.json());//parse the body from request
 const axios = require('axios');
 const moviesRoutes=require("./routes/movies.routes");
 const generalRoutes=require("./routes/general.routes");
+const {PORT}=require("./configs")
 
 const dbCli=require("./client");
 const arrData = require("./movieData/data.json");
@@ -17,7 +18,7 @@ const serError=require("./errorHandler/500");
 
 
 dbCli.connect().then(()=>{
-  app.listen(3000, startingLog);
+  app.listen(PORT, startingLog);
 
 
 function startingLog(req, res) {
