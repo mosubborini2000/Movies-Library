@@ -16,7 +16,10 @@ function movieData(req,res) {
     
 }
 
-
+Router.get("/", endLog);
+function endLog(req, res) {
+  res.send("Welcome to moviesLibrary");
+}
 
 function endLog(req, res) {
   res.send("Welcome to Favorite Page");
