@@ -30,6 +30,19 @@ app.get("/trending", async (req, res) => {
 res.send(myData);
 });
 
+
+//https://api.themoviedb.org/3/movie/157336?api_key=2fe3227676b48c615554c0b555b8389a&append_to_response=videoshttps://api.themoviedb.org/3/movie/157336?api_key=2fe3227676b48c615554c0b555b8389a&append_to_response=videos
+app.get("/appendToResponse", async (req, res) => {
+  const axiosResponse = await axios.get(`https://api.themoviedb.org/3/movie/157336?api_key=${process.env.SECRET_API}&append_to_response=videoshttps://api.themoviedb.org/3/movie/157336?api_key=${process.env.SECRET_API}&append_to_response=videos`);
+  const myData = axiosResponse.data.results.map((result) => ({
+    "id": result.id,
+    "title": result.title,
+    "release_date": result.release_date,
+    "poster_path": result.poster_path,
+    "overview": result.overview
+  })); ;
+res.send(myData);
+});
 app.get("/search", async (req, res) => {
   let mName = req.query.query; 
  let axiosResponse = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.SECRET_API}&language=en-US&query=${mName}&page=2`);

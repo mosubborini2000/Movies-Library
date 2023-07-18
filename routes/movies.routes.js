@@ -7,9 +7,12 @@ Router.post('/addMovie',(req,res)=>{
     let release_date=req.body.release_date;
     let poster_path=req.body.poster_path;
     let overview=req.body.overview;
+    let comment=req.body.comment;
+
+    
   
-    let sqlQr=`insert into movie (title ,release_date ,poster_path ,overview ) values($1,$2,$3,$4)`;
-    dbCli.query(sqlQr,[title,release_date,poster_path,overview]).then(()=>{
+    let sqlQr=`insert into movie (title ,release_date ,poster_path ,overview,comment ) values($1,$2,$3,$4,$5)`;
+    dbCli.query(sqlQr,[title,release_date,poster_path,overview,comment]).then(()=>{
       res.status(201).send(`movie ${title} added to database`);
     })
   
