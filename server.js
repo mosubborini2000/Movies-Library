@@ -58,6 +58,30 @@ app.get("/search", async (req, res) => {
   res.send(movies);
 });
 
+app.get("/au", async (req, res, next) => {
+  try {
+      const axRes = await axios.get(`https://api.themoviedb.org/3/certification/tv/list?api_key=${process.env.SECRET_API}`);
+      const myData = axRes.data.certifications.AU.map((x) => ({
+          "certification": x.certification,
+          "meaning": x.meaning,
+          "order": x.order
+
+      }));
+      res.send(myData);
+
+  } catch (error) {
+      next('next error');
+  }
+});
+
+//https://api.themoviedb.org/3/company/2?api_key=2fe3227676b48c615554c0b555b8389a
+app.get("/searchCompanyDetails", async (req, res) => {
+  let cNum = req.query.query;
+  let axiosResponse = await axios.get(`https://api.themoviedb.org/3/company/${cNum}?api_key=${process.env.SECRET_API}`);
+  res.send( axiosResponse.data)
+});
+
+
 
 app.use(handleNotFound);
 
